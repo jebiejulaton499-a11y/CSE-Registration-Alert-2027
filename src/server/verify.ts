@@ -1,4 +1,4 @@
-import { EXAM_DATE, LOCATION, REGION, officialUrl } from './shared';
+import { EXAM_DATE, LOCATION, REGION, officialUrl } from './shared.js';
 
 export type Status = 'not_verified'|'announced'|'opening_soon'|'open'|'closed'|'verification_failed'|'verification_required';
 export type Evidence = { status:Status; sourceUrl:string|null; method:string; detail:string; openingAt?:string|null };

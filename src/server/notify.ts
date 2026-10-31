@@ -1,5 +1,5 @@
-import { db } from './shared';
-import { messaging } from './firebase';
+import { db } from './shared.js';
+import { messaging } from './firebase.js';
 
 export type Event = {key:string;type:'opening'|'slots'|'announcement'|'closing';title:string;message:string;sourceUrl:string;level?:string};
 export async function sendEvent(event:Event) {

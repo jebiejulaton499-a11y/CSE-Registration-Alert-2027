@@ -1,7 +1,7 @@
 import type { VercelRequest,VercelResponse } from '@vercel/node';
-import { db,tokenHash,tokenSchema } from '../src/server/shared';
-import { limit,reply } from './_common';
-import { messaging } from '../src/server/firebase';
+import { db,tokenHash,tokenSchema } from '../src/server/shared.js';
+import { limit,reply } from './_common.js';
+import { messaging } from '../src/server/firebase.js';
 export default async function handler(req:VercelRequest,res:VercelResponse) {
   if(req.method!=='POST') return reply(res,405,{error:'Method not allowed'});
   try {

@@ -1,6 +1,6 @@
 import type { VercelRequest,VercelResponse } from '@vercel/node';
-import { db,EXAM_DATE,LOCATION,REGION } from '../src/server/shared';
-import { reply } from './_common';
+import { db,EXAM_DATE,LOCATION,REGION } from '../src/server/shared.js';
+import { reply } from './_common.js';
 export default async function handler(req:VercelRequest,res:VercelResponse) {
   if(req.method!=='GET') return reply(res,405,{error:'Method not allowed'});
   try {

@@ -1,7 +1,7 @@
 import type { VercelRequest,VercelResponse } from '@vercel/node';
-import { db,settingsSchema,tokenHash,tokenSchema } from '../src/server/shared';
-import { limit,reply } from './_common';
-import { messaging } from '../src/server/firebase';
+import { db,settingsSchema,tokenHash,tokenSchema } from '../src/server/shared.js';
+import { limit,reply } from './_common.js';
+import { messaging } from '../src/server/firebase.js';
 import { z } from 'zod';
 const bodySchema=z.object({token:tokenSchema,settings:settingsSchema.optional()});
 export default async function handler(req:VercelRequest,res:VercelResponse) {

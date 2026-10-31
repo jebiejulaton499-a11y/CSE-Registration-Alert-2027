@@ -1,6 +1,6 @@
-import { db, EXAM_DATE, LEVELS, LOCATION, REGION, officialUrl, contentDigest } from './shared';
-import { classifyPublicPage, type Evidence } from './verify';
-import { sendEvent } from './notify';
+import { db, EXAM_DATE, LEVELS, LOCATION, REGION, officialUrl, contentDigest } from './shared.js';
+import { classifyPublicPage, type Evidence } from './verify.js';
+import { sendEvent } from './notify.js';
 
 const sources=['https://www.csc.gov.ph/','https://services.csc.gov.ph/'];
 async function permitted(url:string) {
