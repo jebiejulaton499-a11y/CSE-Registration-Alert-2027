@@ -28,3 +28,20 @@ jobs:
           FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
           TOKEN_HASH_SECRET: ${{ secrets.TOKEN_HASH_SECRET }}
           PUBLIC_BASE_URL: ${{ vars.PUBLIC_BASE_URL }}
+      - name: Check Masbate Professional appointment slots
+        env:
+          CSC_EMAIL: ${{ secrets.CSC_EMAIL }}
+          CSC_PASSWORD: ${{ secrets.CSC_PASSWORD }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          TOKEN_HASH_SECRET: ${{ secrets.TOKEN_HASH_SECRET }}
+        run: |
+          if [ -z "$CSC_EMAIL" ] || [ -z "$CSC_PASSWORD" ]; then
+            echo 'CSC credentials not configured; appointment check skipped'
+          else
+            npx playwright install --with-deps chromium
+            npm run check:slots
+          fi
