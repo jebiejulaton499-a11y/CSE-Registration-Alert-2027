@@ -15,7 +15,7 @@ public/                 PWA manifest, icon, combined cache/push service worker
 
 ## Status semantics
 
-Gray means no verified target evidence. Blue means an official page mentions the target exam. Orange means registration wording exists but a live Masbate application slot cannot be independently verified. Green requires a public official interface that confirms both active applications and a matching available slot. The current checker does **not** have a verified public slot endpoint, so it cannot emit green or a slots alert. Add an adapter only after CSC makes such an interface publicly accessible and permits automated checks. No CAPTCHA, login, or access control should be bypassed. Generic closure text is likewise not treated as per-level slot closure.
+Gray means no verified target evidence. Blue means an official page mentions the target exam. Orange means registration wording exists but a live Masbate application slot cannot be independently verified. Green requires confirmed active applications and a matching available slot. An additional appointment card reports the signed-in CSC eServe calendar for Region 5, Masbate FO, Career Service - Professional. A selectable date sends a `slots` push alert to subscribed devices. No CAPTCHA or access control is bypassed, and an inaccessible calendar is reported as a failed check rather than an opening. Generic closure text is likewise not treated as per-level slot closure.
 
 The checker visits the CSC homepage and services homepage, reads robots.txt first, waits between requests, and records errors. It does not guess an opening date. Region V announcement discovery is limited to official content visible on those pages; a direct Region V feed can be added after its exact official URL and robots policy are verified.
 
@@ -31,9 +31,9 @@ The checker visits the CSC homepage and services homepage, reads robots.txt firs
 ## Deployment
 
 1. Push this repository to GitHub. Keep `.env.local` out of Git.
-2. Add GitHub Actions secrets: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, and `TOKEN_HASH_SECRET`. Add repository variable `PUBLIC_BASE_URL` with the final HTTPS site origin.
+2. Add GitHub Actions secrets: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY`, and `TOKEN_HASH_SECRET`. For signed-in CSC appointment checks, also add `CSC_EMAIL` and `CSC_PASSWORD` as Actions secrets. Set a fresh CSC password directly in GitHub; never commit it or send it in chat. Add repository variable `PUBLIC_BASE_URL` with the final HTTPS site origin.
 3. Connect the repository to Vercel Hobby. Configure every `.env.example` variable in Vercel Project Settings → Environment Variables, except `PUBLIC_BASE_URL` should be the deployed HTTPS origin. Build command: `npm run build`; output: `dist`.
-4. In GitHub Actions, run **Check official CSC sources** manually. Inspect its logs, then confirm new `monitoring_logs` entries in Supabase. The schedule runs at minute 17 each hour, subject to GitHub scheduling delays or dropped runs; it is not an exact-minute guarantee. Keep the repository active and check workflow history periodically.
+4. In GitHub Actions, run **Check official CSC sources** manually. Inspect its logs, then confirm new `monitoring_logs` entries in Supabase. The appointment step installs Playwright Chromium, signs in to CSC eServe, selects Region 5 / Masbate FO / Career Service - Professional, and checks its calendar through March 2027. It skips when the CSC secrets are missing and fails if CSC requires CAPTCHA or blocks the session. The schedule runs at minute 17 each hour, subject to GitHub scheduling delays or dropped runs; it is not an exact-minute guarantee. Keep the repository active and check workflow history periodically.
 5. On Android Chrome, open the HTTPS site, tap **Enable notifications**, allow permission, and use **Send test notification**. Confirm foreground and background delivery. Install via Chrome menu → **Add to Home screen** / **Install app**. Test offline: the app shell and last cached status should load with a stale warning. On iPhone, use a supported Home Screen web app; browser push support varies by OS and browser.
 
 ## Security and operational notes
@@ -46,4 +46,4 @@ The checker visits the CSC homepage and services homepage, reads robots.txt firs
 
 ## Tests and verification
 
-`npm test` covers the central false-positive gate with mocked official page text and structured slot inputs. Before production, manually verify: Firebase token registration and deletion in Supabase, the one-per-day test notification, background tap behavior, RLS denial with the anon key, workflow dispatch, inaccessible CSC behavior and monitoring logs, Android installation, and offline shell. These require live credentials and devices and are not simulated by unit tests.
+`npm test` covers the central false-positive gate with mocked official page text and structured calendar inputs. Before relying on appointment alerts, verify the authenticated workflow with a manual run and confirm Android notification delivery with the site's test button. Live CSC sign-in, CAPTCHA behavior, and phone delivery require the user's account and device and are not simulated by unit tests.
