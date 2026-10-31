@@ -2,6 +2,8 @@ import { initializeApp,getApps } from 'firebase/app';
 import { getMessaging,getToken,isSupported,onMessage } from 'firebase/messaging';
 const config={apiKey:import.meta.env.VITE_FIREBASE_API_KEY,authDomain:import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,projectId:import.meta.env.VITE_FIREBASE_PROJECT_ID,appId:import.meta.env.VITE_FIREBASE_APP_ID,messagingSenderId:import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID};
 export async function subscribePush(onForeground:(title:string,body:string)=>void) {
+  if(!config.apiKey||!config.projectId||!config.appId||!config.messagingSenderId||!import.meta.env.VITE_FIREBASE_VAPID_KEY)
+    throw new Error('Notifications are not set up yet. The site owner needs to connect a Firebase project.');
   if(!window.isSecureContext||!await isSupported()) throw new Error('Push is unavailable in this browser or insecure context');
   const permission=await Notification.requestPermission();
   if(permission!=='granted') throw new Error('Notification permission was not granted');
